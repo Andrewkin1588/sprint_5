@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
-from conftest import CreateUser, authoriztaion
+from helpers import CreateUser, authoriztaion
 from locators import PageRegistration, LogInPage, LogInMainPageLocators, GetOrder
+from src import constants
 
 
 
@@ -10,8 +11,7 @@ class TestLogIn:
         user = CreateUser.generate_user()
         email, password = user.email, user.password
         CreateUser(user.name, user.email, user.password).user_registration(driver, helpers) # Регистрируем пользователя
-        url = 'https://stellarburgers.nomoreparties.site/'
-        driver.get(url) # Переходим на главную
+        driver.get(constants.BASE_URL) # Переходим на главную
 
         helpers.wait_until_visibility_of_element_located(driver, LogInMainPageLocators.LOG_IN_BUTTON)
 
@@ -26,16 +26,13 @@ class TestLogIn:
 
         assert helpers.get_text_from_element(driver, GetOrder.ORDER_BUTTON) == 'Оформить заказ'
 
-        driver.quit()
-
     # Вход по линку "Личный кабинет"
     def test_log_in_from_personal_account_link(self, driver, helpers):
         user = CreateUser.generate_user()
         email, password = user.email, user.password
         CreateUser(user.name, user.email, user.password).user_registration(driver, helpers)
 
-        url = 'https://stellarburgers.nomoreparties.site/'
-        driver.get(url)  # Переходим на главную
+        driver.get(constants.BASE_URL)  # Переходим на главную
 
         helpers.wait_until_visibility_of_element_located(driver, LogInMainPageLocators.PERSONAL_ACCOUNT_LINK)
 
@@ -49,7 +46,6 @@ class TestLogIn:
         helpers.wait_until_visibility_of_element_located(driver, GetOrder.ORDER_BUTTON)
 
         assert helpers.get_text_from_element(driver, GetOrder.ORDER_BUTTON) == 'Оформить заказ'
-        driver.quit()
 
     # Вход через страницу регистрации
     def test_log_in_from_registration_page(self, driver, helpers):
@@ -57,8 +53,7 @@ class TestLogIn:
         email, password = user.email, user.password
         CreateUser(user.name, user.email, user.password).user_registration(driver, helpers)
 
-        url = 'https://stellarburgers.nomoreparties.site/'
-        driver.get(url)  # Переходим на главную
+        driver.get(constants.BASE_URL)  # Переходим на главную
 
         helpers.wait_until_visibility_of_element_located(driver, LogInMainPageLocators.LOG_IN_BUTTON)
 
@@ -77,7 +72,6 @@ class TestLogIn:
         helpers.wait_until_visibility_of_element_located(driver, GetOrder.ORDER_BUTTON)
 
         assert helpers.get_text_from_element(driver, GetOrder.ORDER_BUTTON) == 'Оформить заказ'
-        driver.quit()
 
     # Вход через страницу забыли пароль
     def test_log_in_from_forgot_password_page(self, driver, helpers):
@@ -85,8 +79,7 @@ class TestLogIn:
         email, password = user.email, user.password
         CreateUser(user.name, user.email, user.password).user_registration(driver, helpers)
 
-        url = 'https://stellarburgers.nomoreparties.site/'
-        driver.get(url)  # Переходим на главную
+        driver.get(constants.BASE_URL)  # Переходим на главную
 
         helpers.wait_until_visibility_of_element_located(driver, LogInMainPageLocators.LOG_IN_BUTTON)
 
@@ -105,5 +98,3 @@ class TestLogIn:
         helpers.wait_until_visibility_of_element_located(driver, GetOrder.ORDER_BUTTON)
 
         assert helpers.get_text_from_element(driver, GetOrder.ORDER_BUTTON) == 'Оформить заказ'
-
-        driver.quit()

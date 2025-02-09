@@ -1,4 +1,4 @@
-from conftest import GenerateTestData
+from helpers import GenerateTestData
 
 generator = GenerateTestData()
 

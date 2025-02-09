@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
-from conftest import CreateUser, authoriztaion
+from helpers import CreateUser, authoriztaion
 from locators import LogInPage, LogInMainPageLocators, PersonalAccount
+from src import constants
 
 
 class TestLogInToPersonalAccount:
@@ -8,8 +9,7 @@ class TestLogInToPersonalAccount:
         user = CreateUser.generate_user()
         email, password = user.email, user.password
         CreateUser(user.name, user.email, user.password).user_registration(driver, helpers)  # Регистрируем пользователя
-        url = 'https://stellarburgers.nomoreparties.site/'
-        driver.get(url)  # Переходим на главную
+        driver.get(constants.BASE_URL)  # Переходим на главную
 
         helpers.wait_until_visibility_of_element_located(driver, LogInMainPageLocators.LOG_IN_BUTTON)
         driver.find_element(By.XPATH, LogInMainPageLocators.LOG_IN_BUTTON).click()
@@ -23,5 +23,3 @@ class TestLogInToPersonalAccount:
         helpers.wait_until_visibility_of_element_located(driver, PersonalAccount.PROFILE_LINK)
 
         assert helpers.get_text_from_element(driver, PersonalAccount.PROFILE_LINK) == 'Профиль'
-
-        driver.quit()

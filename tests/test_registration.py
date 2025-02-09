@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-from conftest import GenerateTestData, registration
+from helpers import GenerateTestData, registration
 from locators import PageRegistration, LogInPage
 
 
@@ -21,9 +21,6 @@ class TestRegistration:
         # Ожидаем появления кнопки "Войти" после успешной регистрации
         helpers.wait_until_visibility_of_element_located(driver, LogInPage.LOG_IN_BUTTON)
 
-        # Закрываем браузер
-        driver.quit()
-
     def test_registration_negative(self, driver, helpers):
         registration(driver, helpers)
         # Заполняем поля для регистрации
@@ -41,6 +38,3 @@ class TestRegistration:
         # Проверяем текст сообщения о некорректном пароле
         invalid_password_text = driver.find_element(By.XPATH, PageRegistration.INVALID_PASSWORD_ERROR).text
         assert invalid_password_text == 'Некорректный пароль'
-
-        # Закрываем браузер
-        driver.quit()
