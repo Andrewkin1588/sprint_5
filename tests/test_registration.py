@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-from conftest import GenerateTestData
+from conftest import GenerateTestData, registration
 from locators import PageRegistration, LogInPage
 
 
@@ -7,7 +7,8 @@ generator = GenerateTestData()
 
 
 class TestRegistration:
-    def test_registration_positive(self, registration, driver, helpers):
+    def test_registration_positive(self, driver, helpers):
+        registration(driver, helpers)
         # Заполняем поля для регистрации
         fields_input = driver.find_elements(By.XPATH, PageRegistration.INPUT_NAME_EMAIL_PASSWORD)
         fields_input[0].send_keys(generator.generate_name())
@@ -23,7 +24,8 @@ class TestRegistration:
         # Закрываем браузер
         driver.quit()
 
-    def test_registration_negative(self, registration, driver, helpers):
+    def test_registration_negative(self, driver, helpers):
+        registration(driver, helpers)
         # Заполняем поля для регистрации
         fields_input = driver.find_elements(By.XPATH, PageRegistration.INPUT_NAME_EMAIL_PASSWORD)
         fields_input[0].send_keys(generator.generate_name())

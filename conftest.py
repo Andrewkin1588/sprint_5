@@ -1,4 +1,5 @@
 import random
+import time
 
 import pytest
 from faker import Faker
@@ -45,8 +46,39 @@ class Helpers:
         return WebDriverWait(driver, 5).until(
             EC.visibility_of_element_located((By.XPATH, locator)))
 
+    def get_text_from_element(self, driver, locator):
+        """
+        Получаем тест из элемента
+        :param driver:
+        :param locator:
+        :return:
+        """
+        return driver.find_element(By.XPATH, locator).text
 
-@pytest.fixture(scope='function')
+
+class CreateUser:
+
+    def __init__(self, name, mail, password):
+        self.name = name
+        self.email = mail
+        self.password = password
+
+    @classmethod
+    def generate_user(cls):
+        generator = GenerateTestData()
+        return cls(generator.generate_name(), generator.generate_email(), generator.generate_password())
+
+    def user_registration(self, driver, helpers):
+        registration(driver, helpers)
+        fields_input = driver.find_elements(By.XPATH, PageRegistration.INPUT_NAME_EMAIL_PASSWORD)
+        fields_input[0].send_keys(self.name)
+        fields_input[1].send_keys(self.email)
+        fields_input[2].send_keys(self.password)
+        driver.find_element(By.XPATH, PageRegistration.REGISTRATION_BUTTON).click()
+
+        return self.email, self.password
+
+
 def registration(driver, helpers):
     # Переходим на главную страницу
     url = 'https://stellarburgers.nomoreparties.site/'
@@ -66,6 +98,15 @@ def registration(driver, helpers):
 
     # Ожидаем появления полей для ввода
     helpers.wait_until_visibility_of_element_located(driver, PageRegistration.INPUT_NAME_EMAIL_PASSWORD)
+
+
+def authoriztaion(driver, email, password):
+    # Заполняем данные зарегистрированным пользователем
+    driver.find_element(By.XPATH, LogInPage.INPUT_EMAIL).send_keys(email)
+    driver.find_element(By.XPATH, LogInPage.INPUT_PASSWORD).send_keys(password)
+
+    # Входим в ЛК
+    driver.find_element(By.XPATH, LogInPage.LOG_IN_BUTTON).click()
 
 
 @pytest.fixture(scope='function')
